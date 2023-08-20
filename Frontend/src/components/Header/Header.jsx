@@ -1,4 +1,4 @@
-import logo from "../../assets/argentBankLogo.png";
+import logo from "../../assets/argentBankLogo.webp";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectLoginToken } from "../../selectors/user.selectors";
