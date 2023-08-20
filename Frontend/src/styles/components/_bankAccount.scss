@@ -1,0 +1,29 @@
+.account {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 900px;
+    background-color: rgb(61, 61, 61);
+    padding: 20px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    &-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #fff;
+        .account-id {
+            font-size: 18px;
+        }
+        .account-balance {
+            font-size: 28px;
+        }
+        .account-subtitle {
+            font-size: 12px;
+        }
+    }
+    .chevron {
+        font-size: 70px;
+        color: #fff;
+    }
+}
