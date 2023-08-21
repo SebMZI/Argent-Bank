@@ -9,7 +9,7 @@ const Home = () => {
     <main>
       <section className="hero">
         <div className="hero-banner">
-          <article className="hero-content">
+          <article className="hero-content"> 
             <h2>
               No fees. <br />
               No minimum deposit. <br />

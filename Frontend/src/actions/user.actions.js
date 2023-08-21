@@ -42,7 +42,7 @@ export const fetchLogin = (email, password) => {
       );
       await dispatch(fetchLoginSucceeded(res.data.body.token));
     } catch (error) {
-      dispatch(fetchLoginFailed(error.message));
+      dispatch(fetchLoginFailed(error));
     }
   };
 };

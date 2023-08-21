@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLogin } from "../../actions/user.actions";
 import { useNavigate } from "react-router-dom";
-import { selectLoginToken } from "../../selectors/user.selectors";
+import { loginStatus, selectLoginToken } from "../../selectors/user.selectors";
 import { fetchProfile } from "../../actions/profile.actions";
 
 const Signin = () => {
@@ -11,6 +11,7 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const token = useSelector(selectLoginToken);
+  const status = useSelector(loginStatus);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -57,6 +58,10 @@ const Signin = () => {
           <div className="saveLogins-container">
             <label htmlFor="savelogins">Remember me</label>
             <input type="checkbox" id="savelogins" />
+          </div>
+
+          <div className="error">
+            {status === "failed" ? "Email or Password Invalid." : null}
           </div>
 
           <button type="submit" className="signin-button">
