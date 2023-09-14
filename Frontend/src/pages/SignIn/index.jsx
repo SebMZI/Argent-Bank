@@ -1,41 +1,46 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLogin } from "../../actions/user.actions";
 import { useNavigate } from "react-router-dom";
-import { loginStatus, selectLoginToken } from "../../selectors/user.selectors";
-import { fetchProfile } from "../../actions/profile.actions";
+import { useLoginMutation } from "../../features/auth/authApiSlice";
+import { setCredentials } from "../../features/auth/authSlice";
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const Signin = () => {
   const dispatch = useDispatch();
+  const [login, { isError }] = useLoginMutation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const token = useSelector(selectLoginToken);
-  const status = useSelector(loginStatus);
+  const token = useSelector(selectCurrentToken);
 
-  const handleLogin = (e) => {
+  const handleSubmit = async (e) => {
+    console.log(email, password);
     e.preventDefault();
-    dispatch(fetchLogin(email, password));
+    try {
+      const userData = await login({
+        email: email,
+        password: password,
+      }).unwrap();
+      console.log(userData);
+      dispatch(setCredentials({ ...userData, email }));
+      setEmail("");
+      setPassword("");
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-  const handleProfile = useCallback(
-    (token) => {
-      dispatch(fetchProfile(token));
-    },
-    [dispatch]
-  );
 
   useEffect(() => {
     if (token) {
       navigate("/profile");
-      handleProfile(token);
     }
-  }, [token, navigate, handleProfile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, navigate]);
 
   return (
     <main className="main-signin">
       <section className="signin">
-        <form className="signin-form" onSubmit={handleLogin}>
+        <form className="signin-form" onSubmit={handleSubmit}>
           <div className="form-header">
             <i className="fa-solid fa-circle-user"></i>
             <h2>Sign In</h2>
@@ -61,7 +66,7 @@ const Signin = () => {
           </div>
 
           <div className="error">
-            {status === "failed" ? "Email or Password Invalid." : null}
+            {isError ? "Email or Password Invalid." : null}
           </div>
 
           <button type="submit" className="signin-button">

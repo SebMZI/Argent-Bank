@@ -1,10 +1,10 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectLoginToken } from "../../selectors/user.selectors";
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const PrivateRoute = () => {
-  const token = useSelector(selectLoginToken);
+  const token = useSelector(selectCurrentToken);
   return token ? <Outlet /> : <Navigate to={"/login"} />;
 };
 

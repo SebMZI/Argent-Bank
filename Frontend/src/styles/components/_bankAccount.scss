@@ -1,3 +1,5 @@
+.acc-container {
+}
 .account {
     display: flex;
     flex-direction: row;
@@ -25,5 +27,76 @@
     .chevron {
         font-size: 70px;
         color: #fff;
+    }
+}
+
+.transaction-container {
+    margin: 50px 0 0;
+    .transaction-header {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 20px;
+        width: 100%;
+        padding: 0 15px;
+        color: #fff;
+        p {
+            &:nth-child(1) {
+                width: 20%;
+            }
+            &:nth-child(2) {
+                width: 55%;
+            }
+            &:nth-child(3) {
+                width: 10%;
+            }
+        }
+    }
+    .transaction {
+        display: flex;
+        flex-direction: row;
+        padding: 8px 10px;
+        border-radius: 5px;
+        margin: 10px 0px 0px 0px;
+        color: #fff;
+        background: #00bc77;
+        cursor: pointer;
+        p {
+            &:nth-child(1) {
+                width: 20%;
+            }
+            &:nth-child(2) {
+                width: 55%;
+            }
+            &:nth-child(3) {
+                width: 10%;
+            }
+            &:nth-child(4) {
+                width: 15%;
+            }
+        }
+    }
+    .transaction-info {
+        position: relative;
+        top: -3px;
+        background: #00bc77;
+        color: #fff;
+        display: flex;
+        flex-direction: row;
+        padding: 10px 0 10px 10px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        gap: 60px;
+        .item-type,
+        .item-info {
+            p {
+                margin-bottom: 5px;
+            }
+        }
+
+        .fa-pencil {
+            margin-left: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
     }
 }

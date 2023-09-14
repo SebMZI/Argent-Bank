@@ -1,14 +1,17 @@
 import logo from "../../assets/argentBankLogo.webp";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectLoginToken } from "../../selectors/user.selectors";
-import { disconnection } from "../../actions/user.actions";
-import { selectFirstName } from "../../selectors/profile.selectors";
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+} from "../../features/auth/authSlice";
+import { logOut } from "../../features/auth/authSlice";
+import { selectCurrentUsername } from "../../features/user/userSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const firstName = useSelector(selectFirstName);
-  const token = useSelector(selectLoginToken);
+  const token = useSelector(selectCurrentToken);
+  const username = useSelector(selectCurrentUsername);
 
   return (
     <header className="header">
@@ -25,11 +28,11 @@ const Header = () => {
             ) : (
               <div className="nav-links">
                 <Link to={"/profile"}>
-                  <i className="fa-solid fa-circle-user"> </i>
-                  <p>{firstName}</p>
+                  <p className="username">{username}</p>
+                  <i className="fa-solid fa-circle-user"></i>
                 </Link>
-                <Link to={"/"} onClick={() => dispatch(disconnection())}>
-                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <Link to={"/"} onClick={() => dispatch(logOut())}>
+                  <i className="fa-solid fa-arrow-right-from-bracket"></i>
                   <p>Sign Out</p>
                 </Link>
               </div>

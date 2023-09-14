@@ -1,38 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLoginToken } from "../../selectors/user.selectors";
-import {
-  selectFirstName,
-  selectLastName,
-  selectUserName,
-} from "../../selectors/profile.selectors";
 import Button from "../../components/Button/Button";
-import { fetchUpdateProfile } from "../../actions/profile.actions";
 import BankAccount from "../../components/BankAccount/BankAccount";
+import {
+  selectCurrentFirstname,
+  selectCurrentId,
+  selectCurrentLastname,
+  selectCurrentUsername,
+} from "../../features/user/userSlice";
+import {
+  useUpdateUserMutation,
+  useUserQuery,
+} from "../../features/user/userApiSlice";
+import { setUserInfo } from "../../features/user/userSlice";
+import { useAccountsQuery } from "../../features/bank/bankApiSlice";
+import { setAccounts } from "../../features/bank/bankSlice";
 
 const User = () => {
+  const userId = useSelector(selectCurrentId);
   const dispatch = useDispatch();
-  const token = useSelector(selectLoginToken);
-  const firstName = useSelector(selectFirstName);
-  const lastName = useSelector(selectLastName);
-  const userName = useSelector(selectUserName);
+  const { data: user } = useUserQuery();
+  const [updateUser, { isError }] = useUpdateUserMutation();
+  const { data: accounts } = useAccountsQuery({ userId });
+
+  console.log(accounts && accounts);
+
+  const firstname = useSelector(selectCurrentFirstname);
+  const lastname = useSelector(selectCurrentLastname);
+  const username = useSelector(selectCurrentUsername);
+
   const [updatedUsername, setUpdatedUsername] = useState();
   const [toggle, setToggle] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(fetchUpdateProfile(token, updatedUsername));
-    setToggle(!toggle);
+    try {
+      const result = await updateUser({ userName: updatedUsername }).unwrap();
+      console.log(result);
+      setToggle(!toggle);
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  useEffect(() => {
+    dispatch(setUserInfo({ user }));
+  }, [user]);
 
   return (
     <main className="user-page">
       {toggle === false ? (
         <div className="user-welcome-content">
           <h1 className="welcome-title">Welcome back</h1>
-          <p className="welcome-names">
-            {firstName} {lastName}
-          </p>
+          <p className="welcome-names">{`${firstname} ${lastname}`}</p>
           <Button type="" text="Edit Name" fnc={() => setToggle(!toggle)} />
         </div>
       ) : (
@@ -44,7 +64,7 @@ const User = () => {
               <input
                 type="text"
                 id="username"
-                defaultValue={updatedUsername ? updatedUsername : userName}
+                defaultValue={updatedUsername ? updatedUsername : username}
                 onChange={(e) => setUpdatedUsername(e.target.value)}
               />
             </div>
@@ -54,7 +74,7 @@ const User = () => {
                 type="text"
                 name="firstname"
                 id="firstname"
-                value={firstName}
+                value={firstname}
                 disabled
               />
             </div>
@@ -64,7 +84,7 @@ const User = () => {
                 type="text"
                 name="lastname"
                 id="lastname"
-                value={lastName}
+                value={lastname}
                 disabled
               />
             </div>
@@ -77,9 +97,15 @@ const User = () => {
       )}
 
       <div className="bankaccounts-container">
-        <BankAccount id="3548" balance="42,547.58" />
-        <BankAccount id="4719" balance="100,018,249.15" />
-        <BankAccount id="6344" balance="9,017.20" />
+        {accounts &&
+          accounts.map((acc) => (
+            <BankAccount
+              key={acc._id}
+              id={acc.account}
+              balance={acc.availableBalance}
+              accId={acc._id}
+            />
+          ))}
       </div>
     </main>
   );
