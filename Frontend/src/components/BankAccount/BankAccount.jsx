@@ -14,9 +14,17 @@ const BankAccount = ({ id, balance, accId }) => {
   const [toggle, setToggle] = useState(false);
   const [toggleTransac, setToggleTransac] = useState({});
   const { data: transactions } = useTransactionsQuery(accId);
-  dispatch(setTransactions({ transactions }));
+  const [transactionFiltered, setTransactionsFiltered] = useState();
 
-  const transactionsArray = useSelector(selectCurrentTransactions);
+  useEffect(() => {
+    if (transactions) {
+      // Vous pouvez mettre en place cette logique pour filtrer les transactions
+      const filteredTransactions = transactions.filter(
+        (transaction) => transaction.accId === accId
+      );
+      setTransactionsFiltered(filteredTransactions);
+    }
+  }, [transactions, accId]);
 
   const toggleTransaction = (transactionId) => {
     setToggleTransac((prevState) => ({
@@ -42,8 +50,8 @@ const BankAccount = ({ id, balance, accId }) => {
           <p>Amount</p>
           <p>Balance</p>
         </div>
-        {transactionsArray &&
-          transactionsArray.map((transac) => (
+        {transactionFiltered &&
+          transactionFiltered.map((transac) => (
             <div key={transac._id} className="transac-content">
               <article
                 className="transaction"
@@ -56,6 +64,7 @@ const BankAccount = ({ id, balance, accId }) => {
                 <p>{">"}</p>
               </article>
               <Transaction
+                accId={accId}
                 transac={transac}
                 toggle={toggleTransac[transac._id] || false}
               />

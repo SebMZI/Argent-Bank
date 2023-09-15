@@ -1,5 +1,3 @@
-.acc-container {
-}
 .account {
     display: flex;
     flex-direction: row;
@@ -90,6 +88,16 @@
         .item-info {
             p {
                 margin-bottom: 5px;
+            }
+            .edit-transac {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 5px;
+                i {
+                    cursor: pointer;
+                }
             }
         }
 
