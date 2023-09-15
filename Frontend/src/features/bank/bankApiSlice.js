@@ -8,11 +8,16 @@ export const bankApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: userId,
       }),
+      providesTags: ["accounts"],
     }),
     transactions: builder.query({
       query: (accId) => ({
         url: `/bank/accounts/${accId}/transactions`,
       }),
+      providesTags: (result = [], error, arg) => [
+        "transactions",
+        ...result.map(({ id }) => ({ type: "Transaction", id })),
+      ],
     }),
     editTransaction: builder.mutation({
       query: ({ accId, transactionId, editedContent }) => ({

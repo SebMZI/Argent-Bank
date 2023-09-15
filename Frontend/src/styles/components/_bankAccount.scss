@@ -98,6 +98,18 @@
                 i {
                     cursor: pointer;
                 }
+                .fa-xmark {
+                    color: hsl(0, 86%, 43%);
+                }
+
+                .edit-input {
+                    outline: none;
+                    background: none;
+                    border: none;
+                    border-bottom: 1px solid #fff;
+                    color: #fff;
+                    font-size: 16px;
+                }
             }
         }
 

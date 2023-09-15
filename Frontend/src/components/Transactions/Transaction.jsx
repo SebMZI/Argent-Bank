@@ -10,25 +10,34 @@ const Transaction = ({ accId, transac, toggle }) => {
   const transacId = transac._id;
 
   const handleEditNote = async (transactionId) => {
+    const editedContent = { note: editedNote };
+
     try {
       const result = await editTransaction({
         accId,
         transactionId,
-        note: "test",
+        editedContent,
       });
       console.log(result);
+      setNoteToggle(false);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleEditCategory = async (transactionId) => {
+  const handleEditCategory = async (
+    transactionId = "65041b4700ce9847b4d42767"
+  ) => {
+    const editedContent = { category: editedCategory };
+
     try {
-      const result = await editTransaction(
-        { accId, transactionId },
-        { category: editedCategory }
-      );
+      const result = await editTransaction({
+        accId,
+        transactionId,
+        editedContent,
+      });
       console.log(result);
+      setCategoryToggle(false);
     } catch (err) {
       console.log(err);
     }
@@ -47,7 +56,7 @@ const Transaction = ({ accId, transac, toggle }) => {
         <div>
           {!categoryToggle ? (
             <p>
-              {transac.category}
+              {editedCategory ? editedCategory : transac.category}
               <i
                 className="fa-solid fa-pencil"
                 onClick={() => setCategoryToggle(!categoryToggle)}
@@ -56,6 +65,7 @@ const Transaction = ({ accId, transac, toggle }) => {
           ) : (
             <div className="edit-transac">
               <input
+                className="edit-input"
                 type="text"
                 defaultValue={
                   editedCategory ? editedCategory : transac.category
@@ -76,7 +86,7 @@ const Transaction = ({ accId, transac, toggle }) => {
         <div>
           {!noteToggle ? (
             <p>
-              {transac.note}
+              {editedNote ? editedNote : transac.note}
               <i
                 className="fa-solid fa-pencil"
                 onClick={() => setNoteToggle(!noteToggle)}
@@ -85,6 +95,7 @@ const Transaction = ({ accId, transac, toggle }) => {
           ) : (
             <div className="edit-transac">
               <input
+                className="edit-input"
                 type="text"
                 defaultValue={editedNote ? editedNote : transac.note}
                 onChange={(e) => setEditedNote(e.target.value)}

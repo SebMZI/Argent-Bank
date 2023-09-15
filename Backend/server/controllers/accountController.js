@@ -108,7 +108,7 @@ const updateTransaction = async (req, res) => {
     return res.status(400).json({ message: "No ID has been provided!" });
   }
 
-  if (!note || !category) {
+  if (!note && !category) {
     return res
       .status(400)
       .json({ message: "No Category or Note has been provided!" });
@@ -120,14 +120,18 @@ const updateTransaction = async (req, res) => {
     if (!account) {
       return res.status(404).json({ message: "No account found!" });
     }
+    console.log(typeof transacId);
 
     await account.populate("transactions").execPopulate();
     const transaction = account.transactions.find(
-      (transac) => transac._id === transacId
+      (transac) => transac._id == transacId
     );
+
+    console.log(transaction);
     if (!transaction) {
       return res.status(404).json({ message: "No transaction found!" });
     }
+
     if (note) {
       transaction.note = note;
     }
