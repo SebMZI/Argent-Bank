@@ -20,9 +20,9 @@ const Signin = () => {
       const userData = await login({
         email: email,
         password: password,
-      }).unwrap();
-      console.log(userData);
-      dispatch(setCredentials({ ...userData, email }));
+      });
+      console.log("userdata: ", userData);
+      dispatch(setCredentials({ ...userData }));
       setEmail("");
       setPassword("");
     } catch (err) {

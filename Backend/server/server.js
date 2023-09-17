@@ -5,6 +5,7 @@ const swaggerUi = require("swagger-ui-express");
 const yaml = require("yamljs");
 const swaggerDocs = yaml.load("./swagger.yaml");
 const dbConnection = require("./database/connection");
+const cookieParser = require("cookie-parser");
 
 dotEnv.config();
 
@@ -15,13 +16,20 @@ const PORT = process.env.PORT || 3001;
 dbConnection();
 
 // Handle CORS issues
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
+app.use(cookieParser());
 
 // Request payload middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Handle custom routesd
+app.use("/api/v1/refresh", require("./routes/refreshRoutes"));
 app.use("/api/v1/user", require("./routes/userRoutes"));
 app.use("/api/v1/bank", require("./routes/accountRoutes"));
 

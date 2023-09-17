@@ -6,11 +6,12 @@ const userSlice = createSlice({
   reducers: {
     setUserInfo: (state, action) => {
       const { user } = action.payload;
-      if (user && user.body) {
-        state.firstname = user.body.firstName;
-        state.lastname = user.body.lastName;
-        state.username = user.body.userName;
-        state.id = user.body.id;
+      console.log(user);
+      if (user) {
+        state.firstname = user.firstName;
+        state.lastname = user.lastName;
+        state.username = user.userName;
+        state.id = user._id;
       }
     },
   },

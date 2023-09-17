@@ -1,3 +1,4 @@
+const { format } = require("date-fns");
 const Account = require("../database/models/accountModel");
 const Transaction = require("../database/models/transactionModel");
 
@@ -24,10 +25,10 @@ const createAccount = async (req, res) => {
 };
 
 const createTransaction = async (req, res) => {
-  const { accId, date, desc, amount, balance, transactionType } = req.body;
-
+  const { accId, desc, amount, balance, transactionType } = req.body;
+  const date = format(new Date(), "dd/MM/yyyy");
   // Validate input data
-  if (!accId || !date || !desc || !amount || !balance || !transactionType) {
+  if (!accId || !desc || !amount || !balance || !transactionType) {
     return res.status(400).json({ message: "All fields are required!" });
   }
 
@@ -43,7 +44,7 @@ const createTransaction = async (req, res) => {
 
     const transaction = new Transaction({
       accId,
-      date,
+      date: date,
       desc,
       amount,
       balance,

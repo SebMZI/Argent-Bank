@@ -25,9 +25,7 @@ const Transaction = ({ accId, transac, toggle }) => {
     }
   };
 
-  const handleEditCategory = async (
-    transactionId = "65041b4700ce9847b4d42767"
-  ) => {
+  const handleEditCategory = async (transactionId) => {
     const editedContent = { category: editedCategory };
 
     try {
