@@ -7,7 +7,7 @@ import "./styles/index.scss";
 import Footer from "./components/Footer/Footer";
 import PrivateRoute from "./components/PrivateRoutes/PrivateRoute";
 import Dashboard from "./pages/Banker/Dashboard";
-import AdminDash from "./pages/admin/AdminDash";
+import Client from "./pages/Banker/Client";
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="*" element={<Home />} />
             <Route path="/login" element={<Signin />} />
 
             {/* User */}
@@ -27,11 +28,7 @@ function App() {
             {/* Banker */}
             <Route element={<PrivateRoute role={1406} />}>
               <Route path="/panel/banker" element={<Dashboard />} />
-            </Route>
-
-            {/* Admin */}
-            <Route element={<PrivateRoute role={5897} />}>
-              <Route path="/panel/admin" element={<AdminDash />} />
+              <Route path="/panel/banker/users/:id" element={<Client />} />
             </Route>
           </Routes>
           <Footer />

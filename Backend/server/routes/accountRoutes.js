@@ -5,19 +5,7 @@ const accountController = require("../controllers/accountController");
 const verifyRoles = require("../middleware/rolesValidation");
 const rolesList = require("../config/rolesList");
 
-router.post(
-  "/createAcc",
-  tokenValidation.validateToken,
-  verifyRoles(rolesList.Banker),
-  accountController.createAccount
-);
 
-router.post(
-  "/accounts/createTransac",
-  tokenValidation.validateToken,
-  verifyRoles(rolesList.Banker),
-  accountController.createTransaction
-);
 
 router.post(
   "/accounts",

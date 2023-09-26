@@ -32,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/refresh", require("./routes/refreshRoutes"));
 app.use("/api/v1/user", require("./routes/userRoutes"));
 app.use("/api/v1/bank", require("./routes/accountRoutes"));
+app.use("/api/v1/panel", require("./routes/bankerRoutes"));
 
 // API Documentation
 if (process.env.NODE_ENV !== "production") {

@@ -9,10 +9,7 @@ const userSchema = new mongoose.Schema(
     userName: String,
     refreshToken: String,
     roles: {
-      Client: {
-        type: Number,
-        default: 2502,
-      },
+      Client: Number,
       Banker: Number,
       Admin: Number,
     },

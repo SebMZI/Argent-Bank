@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../features/auth/authApiSlice";
-import { setCredentials } from "../../features/auth/authSlice";
+import {
+  selectCurrentRoles,
+  setCredentials,
+} from "../../features/auth/authSlice";
 import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const Signin = () => {
@@ -12,6 +15,11 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const token = useSelector(selectCurrentToken);
+  const roles = useSelector(selectCurrentRoles);
+  const rolesArray = Object.values(roles);
+
+  const client = rolesArray && rolesArray.includes(2502);
+  const banker = rolesArray && rolesArray.includes(1406);
 
   const handleSubmit = async (e) => {
     console.log(email, password);
@@ -30,7 +38,11 @@ const Signin = () => {
 
   useEffect(() => {
     if (token) {
-      navigate("/profile");
+      if (client) {
+        navigate("/profile");
+      } else if (banker) {
+        navigate("/panel/banker");
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, navigate]);

@@ -10,8 +10,9 @@ const PrivateRoute = ({ role }) => {
   const tokenAuth = JSON.parse(localStorage.getItem("persist:auth"));
   const token = useSelector(selectCurrentToken);
   const roles = useSelector(selectCurrentRoles);
+  const rolesArray = Object.values(roles);
 
-  const isRole = roles.includes(role);
+  const isRole = rolesArray && rolesArray.includes(role);
 
   if (token && !tokenAuth) {
     if (isRole) {

@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 import authReducer from "../features/auth/authSlice";
 import userReducer from "../features/user/userSlice";
+import bankerReducer from "../features/banker/bankerSlice";
 
 import {
   persistStore,
@@ -32,6 +33,7 @@ export const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: persistedAuthReducer,
     user: persistedUserReducer,
+    banker: bankerReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -117,7 +117,31 @@ paths:
         '500':
           description: Internal Server Error
           
-          
+  /panel/users/{userId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Bank (Banker)
+        - Bank (Admin)
+      summary: Get a Client by his Id
+      description: Get a client by his Id to update or delete him.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: userId
+          description: Client Id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Client retrieved successfully
+        '400':
+          description: Client Id required!
+        '500':
+          description: No user found!
+                  
           
   /panel/banker/addAccount:
     post: 
@@ -143,8 +167,8 @@ paths:
           description: All fields are required
         '500':
           description: Error creating account
-          
-          
+  
+  
   /panel/banker/addTransaction:
     post:
       security:
