@@ -2,16 +2,20 @@ const express = require("express");
 const router = express.Router();
 const tokenValidation = require("../middleware/tokenValidation");
 const accountController = require("../controllers/accountController");
+const verifyRoles = require("../middleware/rolesValidation");
+const rolesList = require("../config/rolesList");
 
 router.post(
   "/createAcc",
   tokenValidation.validateToken,
+  verifyRoles(rolesList.Banker),
   accountController.createAccount
 );
 
 router.post(
   "/accounts/createTransac",
   tokenValidation.validateToken,
+  verifyRoles(rolesList.Banker),
   accountController.createTransaction
 );
 

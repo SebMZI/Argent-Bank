@@ -25,10 +25,10 @@ const createAccount = async (req, res) => {
 };
 
 const createTransaction = async (req, res) => {
-  const { accId, desc, amount, balance, transactionType } = req.body;
+  const { accId, desc, amount, balance } = req.body;
   const date = format(new Date(), "dd/MM/yyyy");
   // Validate input data
-  if (!accId || !desc || !amount || !balance || !transactionType) {
+  if (!accId || !desc || !amount || !balance) {
     return res.status(400).json({ message: "All fields are required!" });
   }
 
@@ -48,7 +48,6 @@ const createTransaction = async (req, res) => {
       desc,
       amount,
       balance,
-      transactionType,
     });
 
     // Save the transaction to the database
@@ -70,7 +69,7 @@ const getAllAccounts = async (req, res) => {
   const { userId } = req.body;
 
   try {
-    const result = await Account.find({ user: userId })
+    const result = await Account.find({ user: userId || req.id })
       .select("-transactions")
       .exec();
     if (!result) {
@@ -109,11 +108,11 @@ const updateTransaction = async (req, res) => {
     return res.status(400).json({ message: "No ID has been provided!" });
   }
 
-  if (!note && !category) {
-    return res
-      .status(400)
-      .json({ message: "No Category or Note has been provided!" });
-  }
+  // if (!note && !category) {
+  //   return res
+  //     .status(400)
+  //     .json({ message: "No Category or Note has been provided!" });
+  // }
 
   try {
     const account = await Account.findById(accId);

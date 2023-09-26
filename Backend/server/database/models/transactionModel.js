@@ -25,6 +25,7 @@ const transactionSchema = mongoose.Schema({
   transactionType: {
     type: String,
     required: true,
+    default: "Electronic",
   },
   note: {
     type: String,

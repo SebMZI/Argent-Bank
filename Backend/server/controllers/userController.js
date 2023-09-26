@@ -46,10 +46,17 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Email or Password invalid !" });
     }
 
+    req.id = user._id;
+
     const token = jwt.sign(
-      { id: user._id },
+      {
+        UserInfo: {
+          id: user._id,
+          roles: user.roles,
+        },
+      },
       process.env.SECRET_KEY || "default-secret-key",
-      { expiresIn: "15m" }
+      { expiresIn: "30s" }
     );
 
     const refreshToken = jwt.sign(
@@ -67,10 +74,23 @@ const loginUser = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    return res.status(200).json({ token });
+    const rolesArray = Object.values(user.roles);
+
+    return res.status(200).json({ token, rolesArray });
   } catch (error) {
     console.error("Error in userController", error);
     res.status(400).json({ message: "Error ! Can not login!" });
+  }
+};
+
+const getUsers = async (req, res) => {
+  try {
+    const result = await User.find().exec();
+    console.log(result);
+    res.status(200).json({ result });
+  } catch (err) {
+    console.log("Error in userController, getUsers.", err);
+    res.status(400).json({ message: "Impossible to get all users!" });
   }
 };
 
@@ -79,7 +99,7 @@ const getUserProfile = async (req, res) => {
     const jwtToken = req.headers.authorization.split("Bearer")[1].trim();
     const decodedJwtToken = jwt.decode(jwtToken);
     console.log(decodedJwtToken);
-    const user = await User.findOne({ _id: decodedJwtToken.id });
+    const user = await User.findOne({ _id: decodedJwtToken.UserInfo.id });
 
     if (!user) {
       res.status(404).json({ message: "User not found!" });
@@ -94,14 +114,17 @@ const getUserProfile = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
   try {
-    const jwtToken =
-      req.headers.authorization ||
-      req.headers.Authorization.split("Bearer")[1].trim();
+    const jwtToken = req.headers.authorization.split("Bearer")[1].trim();
     const decodedJwtToken = jwt.decode(jwtToken);
+    console.log(decodedJwtToken);
+    if (!req.body.userName) {
+      return res.status(400).json({ message: "Username is required!" });
+    }
+
     const user = await User.findOneAndUpdate(
-      { _id: decodedJwtToken.id },
+      { _id: decodedJwtToken.UserInfo.id },
       {
-        userName: serviceData.body.userName,
+        userName: req.body.userName,
       },
       { new: true }
     );
@@ -117,4 +140,10 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-module.exports = { createUser, loginUser, updateUserProfile, getUserProfile };
+module.exports = {
+  createUser,
+  loginUser,
+  updateUserProfile,
+  getUserProfile,
+  getUsers,
+};

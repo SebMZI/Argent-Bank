@@ -23,8 +23,6 @@ const Signin = () => {
       });
       console.log("userdata: ", userData);
       dispatch(setCredentials({ ...userData }));
-      setEmail("");
-      setPassword("");
     } catch (err) {
       console.log(err);
     }

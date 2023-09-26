@@ -8,12 +8,14 @@ const userSchema = new mongoose.Schema(
     lastName: String,
     userName: String,
     refreshToken: String,
-    roles: [
-      {
-        type: String,
-        default: "Employee",
+    roles: {
+      Client: {
+        type: Number,
+        default: 2502,
       },
-    ],
+      Banker: Number,
+      Admin: Number,
+    },
   },
   {
     timestamps: true,

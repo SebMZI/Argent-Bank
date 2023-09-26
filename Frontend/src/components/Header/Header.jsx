@@ -28,7 +28,9 @@ const Header = () => {
             ) : (
               <div className="nav-links">
                 <Link to={"/profile"}>
-                  <p className="username">{username}</p>
+                  <p className="username">
+                    {username ? username : "My account"}
+                  </p>
                   <i className="fa-solid fa-circle-user"></i>
                 </Link>
                 <Link to={"/"} onClick={() => dispatch(logOut())}>

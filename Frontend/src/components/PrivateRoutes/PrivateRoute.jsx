@@ -1,18 +1,32 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectCurrentToken } from "../../features/auth/authSlice";
+import {
+  selectCurrentRoles,
+  selectCurrentToken,
+} from "../../features/auth/authSlice";
 
-const PrivateRoute = () => {
+const PrivateRoute = ({ role }) => {
   const tokenAuth = JSON.parse(localStorage.getItem("persist:auth"));
   const token = useSelector(selectCurrentToken);
+  const roles = useSelector(selectCurrentRoles);
+
+  const isRole = roles.includes(role);
 
   if (token && !tokenAuth) {
-    return <Outlet />;
+    if (isRole) {
+      return <Outlet />;
+    } else {
+      return <Navigate to={"/"} />;
+    }
   } else if (tokenAuth.token) {
-    return <Outlet />;
+    if (isRole) {
+      return <Outlet />;
+    } else {
+      return <Navigate to={"/"} />;
+    }
   } else {
-    <Navigate to={"/login"} />;
+    return <Navigate to={"/login"} />;
   }
 };
 

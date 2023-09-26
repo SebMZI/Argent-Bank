@@ -18,9 +18,14 @@ const handleRefreshToken = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: decoded._id },
+      {
+        UserInfo: {
+          id: user._id,
+          roles: user.roles,
+        },
+      },
       process.env.SECRET_KEY || "default-secret-key",
-      { expiresIn: "15m" }
+      { expiresIn: "30s" }
     );
     res.json({ token });
   });

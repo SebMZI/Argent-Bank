@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser");
 dotEnv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3520;
 
 // Connect to the database
 dbConnection();

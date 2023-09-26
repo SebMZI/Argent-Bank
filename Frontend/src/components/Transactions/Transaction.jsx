@@ -10,7 +10,7 @@ const Transaction = ({ accId, transac, toggle }) => {
   const transacId = transac._id;
 
   const handleEditNote = async (transactionId) => {
-    const editedContent = { note: editedNote };
+    const editedContent = { note: editedNote ? editedNote : " " };
 
     try {
       const result = await editTransaction({
@@ -26,7 +26,7 @@ const Transaction = ({ accId, transac, toggle }) => {
   };
 
   const handleEditCategory = async (transactionId) => {
-    const editedContent = { category: editedCategory };
+    const editedContent = { category: editedCategory ? editedCategory : " " };
 
     try {
       const result = await editTransaction({

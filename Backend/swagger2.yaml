@@ -14,7 +14,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Bank
+        - Bank (Client)
       summary: Get accounts
       description: get all accounts available
       responses:
@@ -33,7 +33,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Bank
+        - Bank (Client)
       summary: Get account transactions by Account Id
       description: Get account transactions by Account Id
       parameters:
@@ -60,7 +60,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Bank
+        - Bank (Client)
       summary: Update transaction by Id
       description: Update a transaction note or/and category using its Id.
       parameters:
@@ -93,12 +93,176 @@ paths:
           description : Unauthorized  
         '500':
           description: Internal Server Error
+          
+          
+          
+  /panel/users:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Bank (Banker)
+        - Bank (Admin)
+      summary: Get all Clients from the Bank
+      description: Get all Clients from the bank to add transactions or accounts
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Clients fetched successfully
+        '401': 
+          description: Unauthorized
+        '404':
+          description: Clients not found
+        '500':
+          description: Internal Server Error
+          
+          
+          
+  /panel/banker/addAccount:
+    post: 
+      security:
+        - Bearer: []
+      tags: 
+        - Bank (Banker)
+      summary: Add an account
+      description: Add an account linked to an existing Client.
+      produces: 
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Add an account with a userId (Client ID) and the initial balance.
+          required: true
+          schema:
+            $ref: '#/definitions/addAccount'
+      responses:
+        '201':
+          description: Account created successfully!
+        '400':
+          description: All fields are required
+        '500':
+          description: Error creating account
+          
+          
+  /panel/banker/addTransaction:
+    post:
+      security:
+        - Bearer: []
+      tags: 
+        - Bank (Banker)
+      summary: Add transaction to an existing account
+      description: Add a transaction to an account linked to a client
+      produces: 
+        - application/json  
+      parameters:
+        - in: body
+          name: body
+          description: Add a transaction with accId, desc, amount, balance.
+          required: true
+          schema:
+            $ref: '#/definitions/addTransaction'
+      responses:
+        '201': 
+          description: Transaction created sucessfully
+        '400':
+          description: All fields are required
+        '404':
+          description: No account found with this ID
+        '500': 
+          description: Error creating the transaction
+        
+  /panel/admin/deleteAccount/{accountID}:
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Bank (Admin)
+      summary: Delete an account
+      description: Delete an account
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: accountID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Account deleted successfully
+        '400': 
+          description: All fields are required
+        '500':
+          description: Error deleting the account
+ 
+          
+  /panel/admin/deleteTransaction/{transactionID}:
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Bank (Admin)
+      summary: Delete a transaction
+      description: Delete a transaction
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: transactionID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Transaction deleted successfully
+        '400': 
+          description: All fields are required
+        '500':
+          description: Error deleting the transaction
+          
+          
+  /panel/admin/upUser/{userID}:
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Bank (Admin)
+      summary: Update Client infos
+      description: Update any information of a Client
+      produces: 
+        - application/json
+      parameters:
+        - in: path
+          name: userID
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/updateClient'
+      responses:
+        '200':
+          description: Client updated sucessfully
+        '400':
+          description: All fields are required
+        '500':
+          description: Error updating the Client
+          
+          
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
 definitions:
+  addAccount:
+    properties:
+      user:
+        type: string
+        description: Client ID
+      availableBalance:
+        type: number
+        description: Available balance on the account
   Accounts:
     properties:
       accountId:
@@ -107,6 +271,24 @@ definitions:
       availableBalance:
         type: string
         description: available balance on the account
+  addTransaction:
+    properties:
+      accId:
+        type: string
+        description: Account Id to linked the transaction to it
+      desc: 
+        type: string
+        description: Description of the transaction
+      amount:
+        type: number
+        description: Amount of the transaction
+      balance: 
+        type: number
+        description: balance left after transaction
+      note:
+        type: string
+      category:
+        type: string
   Transactions:
     properties:
       transactions:
@@ -154,7 +336,15 @@ definitions:
         description: note to describe the transaction
       category:
         type: string
-        description: transaction's category  
+        description: transaction's category 
+  updateClient:
+    properties:
+      email:
+        type: string
+      lastname:
+        type: string
+      roles:
+        type: object
   UpdateTransaction:
     properties:
       note: 
