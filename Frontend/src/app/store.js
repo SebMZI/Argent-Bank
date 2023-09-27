@@ -3,6 +3,7 @@ import { apiSlice } from "./api/apiSlice";
 import authReducer from "../features/auth/authSlice";
 import userReducer from "../features/user/userSlice";
 import bankerReducer from "../features/banker/bankerSlice";
+import accountReducer from "../features/bank/bankSlice";
 
 import {
   persistStore,
@@ -34,6 +35,7 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     user: persistedUserReducer,
     banker: bankerReducer,
+    bank: accountReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -22,13 +22,19 @@ const getAllUsers = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const { id } = req.path;
+  const { id } = req.params;
   if (!id) {
     return res.status(400).json({ message: "Client Id required!" });
   }
 
   try {
-    const result = await User.findOne({ _id: id }).exec();
+    const result = await User.findOne({ _id: id })
+      .select("-password")
+      .select("-refreshToken")
+      .select("-createdAt")
+      .select("-updatedAt")
+      .select("-__v")
+      .exec();
     if (!result) {
       return res.status(404).json({ message: "No user Found!" });
     }

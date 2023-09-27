@@ -8,6 +8,7 @@ import {
   setTransactions,
 } from "../../features/bank/bankSlice";
 import Transaction from "../Transactions/Transaction";
+import { selectCurrentRoles } from "../../features/auth/authSlice";
 
 const BankAccount = ({ id, balance, accId }) => {
   const dispatch = useDispatch();
@@ -15,6 +16,12 @@ const BankAccount = ({ id, balance, accId }) => {
   const [toggleTransac, setToggleTransac] = useState({});
   const { data: transactions } = useTransactionsQuery(accId);
   const [transactionFiltered, setTransactionsFiltered] = useState();
+  dispatch(setTransactions(transactions));
+
+  const roles = useSelector(selectCurrentRoles);
+  const rolesArray = Object.values(roles);
+
+  const client = rolesArray && rolesArray.includes(2502);
 
   useEffect(() => {
     if (transactions) {
@@ -43,6 +50,12 @@ const BankAccount = ({ id, balance, accId }) => {
         </div>
         <p className="chevron">{toggle ? "X" : ">"}</p>
       </article>
+      {client ? null : (
+        <div>
+          <button className="btn">Add transaction</button>
+        </div>
+      )}
+
       <div className="transaction-container">
         <div className="transaction-header">
           <p>Date</p>

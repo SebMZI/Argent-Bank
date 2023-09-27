@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useEditTransactionMutation } from "../../features/bank/bankApiSlice";
+import { selectCurrentRoles } from "../../features/auth/authSlice";
+import { useSelector } from "react-redux";
 
 const Transaction = ({ accId, transac, toggle }) => {
   const [editTransaction] = useEditTransactionMutation();
@@ -8,6 +10,11 @@ const Transaction = ({ accId, transac, toggle }) => {
   const [editedNote, setEditedNote] = useState("");
   const [editedCategory, setEditedCategory] = useState("");
   const transacId = transac._id;
+
+  const roles = useSelector(selectCurrentRoles);
+  const rolesArray = Object.values(roles);
+
+  const client = rolesArray && rolesArray.includes(2502);
 
   const handleEditNote = async (transactionId) => {
     const editedContent = { note: editedNote ? editedNote : " " };
@@ -55,10 +62,12 @@ const Transaction = ({ accId, transac, toggle }) => {
           {!categoryToggle ? (
             <p>
               {editedCategory ? editedCategory : transac.category}
-              <i
-                className="fa-solid fa-pencil"
-                onClick={() => setCategoryToggle(!categoryToggle)}
-              ></i>
+              {client ? (
+                <i
+                  className="fa-solid fa-pencil"
+                  onClick={() => setCategoryToggle(!categoryToggle)}
+                ></i>
+              ) : null}
             </p>
           ) : (
             <div className="edit-transac">
@@ -85,10 +94,13 @@ const Transaction = ({ accId, transac, toggle }) => {
           {!noteToggle ? (
             <p>
               {editedNote ? editedNote : transac.note}
-              <i
-                className="fa-solid fa-pencil"
-                onClick={() => setNoteToggle(!noteToggle)}
-              ></i>
+
+              {client ? (
+                <i
+                  className="fa-solid fa-pencil"
+                  onClick={() => setNoteToggle(!noteToggle)}
+                ></i>
+              ) : null}
             </p>
           ) : (
             <div className="edit-transac">

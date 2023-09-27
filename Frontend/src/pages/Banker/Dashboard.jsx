@@ -16,16 +16,22 @@ const Dashboard = () => {
     dispatch(setUsers({ clients }));
   }, [clients]);
 
+  const filteredUsers = users?.result?.filter(
+    (client) => client.roles.Client === 2502
+  );
+
   return (
     <main className="banker">
       <h1 className="banker-title">Dashboard</h1>
+      <h2 className="banker-subtitle">Client list</h2>
       <div>
-        {users?.result?.map((client, index) => (
+        {filteredUsers?.map((client, index) => (
           <Link to={`/panel/banker/users/${client._id}`} key={index}>
-            <article>
+            <article className="card-client">
               <p>
                 {client.firstName} {client.lastName}
               </p>
+              <span>{">"}</span>
             </article>
           </Link>
         ))}

@@ -7,7 +7,12 @@ export const bankerApiSlice = apiSlice.injectEndpoints({
         url: "/panel/users",
       }),
     }),
+    getClient: builder.query({
+      query: (id) => ({
+        url: `/panel/users/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useClientsQuery } = bankerApiSlice;
+export const { useClientsQuery, useGetClientQuery } = bankerApiSlice;
