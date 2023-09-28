@@ -9,10 +9,12 @@ import {
 } from "../../features/bank/bankSlice";
 import Transaction from "../Transactions/Transaction";
 import { selectCurrentRoles } from "../../features/auth/authSlice";
+import Modal from "../Modal/Modal";
 
 const BankAccount = ({ id, balance, accId }) => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
+  const [modalToggle, setModalToggle] = useState(false);
   const [toggleTransac, setToggleTransac] = useState({});
   const { data: transactions } = useTransactionsQuery(accId);
   const [transactionFiltered, setTransactionsFiltered] = useState();
@@ -41,50 +43,63 @@ const BankAccount = ({ id, balance, accId }) => {
   };
 
   return toggle ? (
-    <div className="acc-container">
-      <article className="account" onClick={() => setToggle(!toggle)}>
-        <div className="account-content">
-          <p className="account-id">Argent Bank Checking ({id})</p>
-          <p className="account-balance">${balance}</p>
-          <p className="account-subtitle">Available balance</p>
-        </div>
-        <p className="chevron">{toggle ? "X" : ">"}</p>
-      </article>
-      {client ? null : (
-        <div>
-          <button className="btn">Add transaction</button>
-        </div>
-      )}
+    <>
+      {modalToggle ? (
+        <Modal setModalToggle={setModalToggle} accId={accId} />
+      ) : null}
+      <div className="acc-container">
+        <article className="account" onClick={() => setToggle(!toggle)}>
+          <div className="account-content">
+            <p className="account-id">Argent Bank Checking ({id})</p>
+            <p className="account-balance">${balance}</p>
+            <p className="account-subtitle">Available balance</p>
+          </div>
+          <p className="chevron">{toggle ? "X" : ">"}</p>
+        </article>
+        {client ? null : (
+          <div>
+            <button
+              className="btn"
+              onClick={() => {
+                setModalToggle(!modalToggle);
+                // window.scrollTo("top", "0");
+              }}
+            >
+              Add transaction
+            </button>
+          </div>
+        )}
 
-      <div className="transaction-container">
-        <div className="transaction-header">
-          <p>Date</p>
-          <p>Description</p>
-          <p>Amount</p>
-          <p>Balance</p>
+        <div className="transaction-container">
+          <div className="transaction-header">
+            <p>Date</p>
+            <p>Description</p>
+            <p>Amount</p>
+            <p>Balance</p>
+          </div>
+          {transactionFiltered &&
+            transactionFiltered.map((transac) => (
+              <div key={transac._id} className="transac-content">
+                <article
+                  className="transaction"
+                  onClick={() => toggleTransaction(transac._id)}
+                >
+                  <p>{transac.date}</p>
+                  <p>{transac.desc}</p>
+                  <p>${transac.amount}</p>
+                  <p>${transac.balance}</p>
+                  <p>{">"}</p>
+                </article>
+                <Transaction
+                  accId={accId}
+                  transac={transac}
+                  toggle={toggleTransac[transac._id] || false}
+                />
+              </div>
+            ))}
         </div>
-        {transactionFiltered &&
-          transactionFiltered.map((transac) => (
-            <div key={transac._id} className="transac-content">
-              <article
-                className="transaction"
-                onClick={() => toggleTransaction(transac._id)}
-              >
-                <p>{transac.date}</p>
-                <p>{transac.desc}</p>
-                <p>${transac.amount}</p>
-                <p>${transac.balance}</p>
-                <p>{">"}</p>
-              </article>
-              <Transaction
-                accId={accId}
-                transac={transac}
-                toggle={toggleTransac[transac._id] || false}
-              />
-            </div>
-          ))}
       </div>
-    </div>
+    </>
   ) : (
     <div>
       <article className="account" onClick={() => setToggle(!toggle)}>

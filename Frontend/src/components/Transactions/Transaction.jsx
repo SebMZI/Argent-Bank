@@ -13,12 +13,10 @@ const Transaction = ({ accId, transac, toggle }) => {
 
   const roles = useSelector(selectCurrentRoles);
   const rolesArray = Object.values(roles);
-
   const client = rolesArray && rolesArray.includes(2502);
 
   const handleEditNote = async (transactionId) => {
     const editedContent = { note: editedNote ? editedNote : " " };
-
     try {
       const result = await editTransaction({
         accId,
@@ -47,6 +45,9 @@ const Transaction = ({ accId, transac, toggle }) => {
       console.log(err);
     }
   };
+
+ 
+
   return toggle ? (
     <div className="transaction-info">
       <div className="item-type">
