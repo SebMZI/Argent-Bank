@@ -59,3 +59,26 @@
     }
   }
 }
+
+@media screen and (max-width: 678px) {
+  .hero-banner {
+    display: grid;
+    place-content: center;
+    padding: 0px 20px;
+    .hero-content {
+      position: static;
+      width: 100%;
+    }
+  }
+
+  .services {
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    &-card {
+      text-align: center;
+      margin: 20px 0px;
+      width: 100%;
+    }
+  }
+}
