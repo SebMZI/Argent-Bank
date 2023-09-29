@@ -16,8 +16,9 @@ const PORT = process.env.PORT || 3520;
 dbConnection();
 
 // Handle CORS issues
+//"https://argent-bank-mzi.netlify.app",
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://argent-bank-mzi.netlify.app",
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -44,5 +45,5 @@ app.get("/", (req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
+  console.log(`Server listening on ${PORT}`);
 });

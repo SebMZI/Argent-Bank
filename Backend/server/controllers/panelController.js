@@ -73,13 +73,15 @@ const createTransaction = async (req, res) => {
   const { accId, desc, amount, balance } = req.body;
   const date = format(new Date(), "dd/MM/yyyy");
   // Validate input data
-  if (!accId || !desc || !amount || !balance) {
+  if (!accId || !desc || !amount) {
     return res.status(400).json({ message: "All fields are required!" });
   }
 
   try {
     // Find the account by its ID
     const acc = await Account.findById(accId);
+    const availBalance = acc.availableBalance - amount;
+    console.log(availBalance);
 
     if (!acc) {
       return res
@@ -92,10 +94,12 @@ const createTransaction = async (req, res) => {
       date: date,
       desc,
       amount,
-      balance,
+      balance: availBalance,
     });
 
     // Save the transaction to the database
+    acc.availableBalance = availBalance;
+    await acc.save();
     await transaction.save();
 
     // Associate the transaction with the account by pushing its _id

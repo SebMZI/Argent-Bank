@@ -3,10 +3,7 @@ import { useTransactionsQuery } from "../../features/bank/bankApiSlice";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectCurrentTransactions,
-  setTransactions,
-} from "../../features/bank/bankSlice";
+import { setTransactions } from "../../features/bank/bankSlice";
 import Transaction from "../Transactions/Transaction";
 import { selectCurrentRoles } from "../../features/auth/authSlice";
 import Modal from "../Modal/Modal";
@@ -42,6 +39,8 @@ const BankAccount = ({ id, balance, accId }) => {
     }));
   };
 
+  const negativeBalance = Math.sign(balance);
+
   return toggle ? (
     <>
       {modalToggle ? (
@@ -51,7 +50,11 @@ const BankAccount = ({ id, balance, accId }) => {
         <article className="account" onClick={() => setToggle(!toggle)}>
           <div className="account-content">
             <p className="account-id">Argent Bank Checking ({id})</p>
-            <p className="account-balance">${balance}</p>
+            {negativeBalance === 1 ? (
+              <p className="account-balance">${balance}</p>
+            ) : (
+              <p className="account-balance balance-negative">${balance}</p>
+            )}
             <p className="account-subtitle">Available balance</p>
           </div>
           <p className="chevron">{toggle ? "x" : ">"}</p>
@@ -105,7 +108,11 @@ const BankAccount = ({ id, balance, accId }) => {
       <article className="account" onClick={() => setToggle(!toggle)}>
         <div className="account-content">
           <p className="account-id">Argent Bank Checking ({id})</p>
-          <p className="account-balance">${balance}</p>
+          {negativeBalance === 1 ? (
+            <p className="account-balance">${balance}</p>
+          ) : (
+            <p className="account-balance balance-negative">${balance}</p>
+          )}
           <p className="account-subtitle">Available balance</p>
         </div>
         <p className="chevron">{toggle ? "X" : ">"}</p>

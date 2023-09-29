@@ -16,13 +16,6 @@ const users = [
     password: "password456",
     userName: "Captain",
   },
-  {
-    firstName: "a",
-    lastName: "a",
-    email: "a@a.com",
-    password: "a",
-    userName: "a",
-  },
 ];
 
 users.forEach((user) => {

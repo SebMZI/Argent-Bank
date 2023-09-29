@@ -2,15 +2,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut, setNewToken } from "../../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3520/api/v1",
+  baseUrl: "https://argent-bank-api.onrender.com/api/v1",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
-    console.log("Token from apiSlice: ", token);
 
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
-      console.log(token);
     }
     return headers;
   },

@@ -13,12 +13,12 @@ export const bankerApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     createTransaction: builder.mutation({
-      query: ({ accId, desc, amount, balance }) => ({
+      query: ({ accId, desc, amount }) => ({
         url: "/panel/banker/addTransaction",
         method: "POST",
-        body: { accId, desc, amount, balance },
+        body: { accId, desc, amount },
       }),
-      invalidatesTags: ["transactions"],
+      invalidatesTags: ["accounts", "transactions"],
     }),
     createAccount: builder.mutation({
       query: ({ user, availableBalance }) => ({

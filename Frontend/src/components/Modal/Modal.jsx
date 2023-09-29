@@ -6,17 +6,15 @@ const Modal = ({ setModalToggle, accId }) => {
   const [createTransaction] = useCreateTransactionMutation();
   const dispatch = useDispatch();
   const [amount, setAmount] = useState();
-  const [balance, setBalance] = useState();
   const [desc, setDesc] = useState("");
 
   const handleTransaction = async (e) => {
     e.preventDefault();
 
     try {
-      const result = await createTransaction({ accId, amount, balance, desc });
+      const result = await createTransaction({ accId, amount, desc });
       setDesc("");
       setAmount();
-      setBalance();
       setModalToggle(false);
     } catch (err) {
       console.log(err);
@@ -49,14 +47,6 @@ const Modal = ({ setModalToggle, accId }) => {
             defaultValue={amount}
             placeholder="Enter transaction amount"
             onChange={(e) => setAmount(e.target.valueAsNumber)}
-          />
-          <label htmlFor="balance">Balance</label>
-          <input
-            type="number"
-            id="balance"
-            defaultValue={balance}
-            min={0}
-            onChange={(e) => setBalance(e.target.valueAsNumber)}
           />
           <div className="modal-btns">
             <button className="btn close" onClick={() => setModalToggle(false)}>
